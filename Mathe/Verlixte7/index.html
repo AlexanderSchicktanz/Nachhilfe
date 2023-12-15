@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verflixte7</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            background-color: black;
+        }
+        [answer=w]{
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            animation: wrong .5s;
+        }
+        [answer=r]{
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            animation: right .2s;
+        }
+        @keyframes wrong {
+            from{
+                box-shadow: 0px 0px 20px 50px red inset;
+            }
+            to{
+                box-shadow: 0px 0px 20px 50px rgba(255, 0, 0, 0) inset;
+            }
+        }
+        @keyframes right {
+            from{
+                box-shadow: 0px 0px 20px 50px green inset;
+            }
+            to{
+                box-shadow: 0px 0px 20px 50px rgba(0, 255, 0, 0) inset;
+            }
+        }
+        .show{
+            position: absolute;
+            top: 50vh;
+            left: 50vw;
+            transform: translate(-50%,-50%);
+            color: white;
+        }
+        /*Button*/
+        .pushable {
+          position: relative;
+          border: none;
+          background: transparent;
+          padding: 0;
+          cursor: pointer;
+          outline-offset: 4px;
+          transition: filter 250ms;
+        }
+        .shadow {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 12px;
+          background: hsl(0deg 0% 0% / 0.25);
+          will-change: transform;
+          transform: translateY(2px);
+          transition:
+            transform
+            600ms
+            cubic-bezier(.3, .7, .4, 1);
+        }
+        .edge {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 12px;
+          background: linear-gradient(
+            to left,
+            hsl(340deg 100% 16%) 0%,
+            hsl(340deg 100% 32%) 8%,
+            hsl(340deg 100% 32%) 92%,
+            hsl(340deg 100% 16%) 100%
+          );
+        }
+        .front {
+          display: block;
+          position: relative;
+          padding: 12px 42px;
+          border-radius: 12px;
+          font-size: 1.25rem;
+          color: white;
+          background: hsl(345deg 100% 47%);
+          will-change: transform;
+          transform: translateY(-4px);
+          transition:
+            transform
+            600ms
+            cubic-bezier(.3, .7, .4, 1);
+        }
+        .pushable:hover {
+          filter: brightness(110%);
+        }
+        .pushable:hover .front {
+          transform: translateY(-6px);
+          transition:
+            transform
+            250ms
+            cubic-bezier(.3, .7, .4, 1.5);
+        }
+        .pushable:active .front {
+          transform: translateY(-2px);
+          transition: transform 34ms;
+        }
+        .pushable:hover .shadow {
+          transform: translateY(4px);
+          transition:
+            transform
+            250ms
+            cubic-bezier(.3, .7, .4, 1.5);
+        }
+        .pushable:active .shadow {
+          transform: translateY(1px);
+          transition: transform 34ms;
+        }
+        .pushable:focus:not(:focus-visible) {
+          outline: none;
+        }
+    </style>
+</head>
+<body answer="n">
+    <script>
+        let divisor = 7;
+        let divident = 1;
+        let verflixt;
+        let Stellen;
+        function check(verflixtGedrückt){
+            verflixt = false;
+            if(divident%divisor==0){
+                verflixt = true;
+            }else{
+                Stellen = Math.floor(Math.log10(divident))+1;
+                for(let i=0;i<Stellen;i++){
+                    if(divident.toString()[i]==divisor){
+                        verflixt = true;
+                    }
+                }
+            }
+            if(verflixtGedrückt==verflixt){
+                document.body.setAttribute("answer","r");
+                setTimeout(()=>{document.body.setAttribute("answer","n")},500);
+            }else{
+                document.body.setAttribute("answer","w");
+                setTimeout(()=>{document.body.setAttribute("answer","n")},500);
+            }
+            divident++;
+            document.getElementById("num").getElementsByClassName("front")[0].innerText = divident;
+        }
+        function changeTo(num){
+            divident = 1;
+            document.getElementById("num").getElementsByClassName("front")[0].innerText = divident;
+            divisor = num;
+            document.title = `Verflixte${num}`;
+            document.getElementsByClassName("show")[0].innerText = `Zahl: ${num}`;
+        }
+    </script>
+    <p class="show">
+        Zahl: 7
+    </p>
+    <button class="pushable" onclick="check(true);" style="position: absolute;
+        top: 18vh; /*Geändert*/
+        left:25vw">
+        <span class="shadow"></span>
+        <span class="edge"></span>
+        <span class="front">
+            Verflixt
+        </span>
+    </button>
+    <button class="pushable" id="num" onclick="check(false);" style="position: absolute;
+        top: 18vh; /*Geändert*/
+        right: 25vw">
+        <span class="shadow"></span>
+        <span class="edge"></span>
+        <span class="front">
+            1
+        </span>
+    </button>
+    <div id="change">
+        <button class="pushable" id="2" onclick="changeTo(2);" style="position: absolute;
+            bottom: 37.5vh; /*Geändert*/
+            left: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 2
+            </span>
+        </button>
+        <button class="pushable" id="3" onclick="changeTo(3);" style="position: absolute;
+            bottom: 37.5vh; /*Geändert*/
+            right: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 3
+            </span>
+        </button>
+        <button class="pushable" id="4" onclick="changeTo(4);" style="position: absolute;
+            bottom: 30vh; /*Geändert*/
+            left: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 4
+            </span>
+        </button>
+        <button class="pushable" id="5" onclick="changeTo(5);" style="position: absolute;
+            bottom: 30vh; /*Geändert*/
+            right: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 5
+            </span>
+        </button>
+        <button class="pushable" id="6" onclick="changeTo(6);" style="position: absolute;
+            bottom: 22.5vh; /*Geändert*/
+            left: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 6
+            </span>
+        </button>
+        <button class="pushable" id="7" onclick="changeTo(7);" style="position: absolute;
+            bottom: 22.5vh; /*Geändert*/
+            right: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 7
+            </span>
+        </button>
+        <button class="pushable" id="8" onclick="changeTo(8);" style="position: absolute;
+            bottom: 15vh; /*Geändert*/
+            left: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 8
+            </span>
+        </button>
+        <button class="pushable" id="9" onclick="changeTo(9);" style="position: absolute;
+            bottom: 15vh; /*Geändert*/
+            right: 15vw">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">
+                Wähle 9
+            </span>
+        </button>
+    </div>
+</body>
+</html>
